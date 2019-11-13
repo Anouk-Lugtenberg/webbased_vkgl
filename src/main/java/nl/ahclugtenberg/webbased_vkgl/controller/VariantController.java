@@ -44,9 +44,12 @@ public class VariantController {
      * @return Entity Models of all the variants
      */
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CollectionModel<EntityModel<Variant>>> getAllVariants() {
-        List<EntityModel<Variant>> variants = variantRepository.findAll().stream()
-                .map(variantResource::toResource)
+    public ResponseEntity<CollectionModel<EntityModel<Variant>>> getAllVariants(
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+        int count = variantRepository.findAll().size();
+        List<EntityModel<Variant>> variants = variantRepository.findAll(PageRequest.of(page, size)).stream()
+                .map(variant -> variantResource.toResource(variant, page, size, count))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(
                 new CollectionModel<>(variants)
@@ -63,8 +66,7 @@ public class VariantController {
             @PathVariable String chromosome,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
-        //Het probleem is dat de count de page size aanhoudt
-        int count = variantRepository.findByValues(chromosome, PageRequest.of(page, size)).size();
+        int count = variantRepository.findByValues(chromosome).size();
         List<EntityModel<Variant>> variantsByChromosome = variantRepository.findByValues(chromosome, PageRequest.of(page, size)).stream()
                 .map(variant -> variantResource.toResource(variant, chromosome, page, size, count))
                 .collect(Collectors.toList());

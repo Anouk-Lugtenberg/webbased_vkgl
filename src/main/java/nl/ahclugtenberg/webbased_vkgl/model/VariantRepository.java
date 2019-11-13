@@ -13,6 +13,11 @@ public interface VariantRepository extends CrudRepository<Variant, Integer>, Var
         JpaRepository<Variant, Integer>, JpaSpecificationExecutor<Variant> {
     List<Variant> findAll();
 
+    Page<Variant> findAll(Pageable pageable);
+
+    @Query(value = "SELECT v FROM Variant v WHERE chromosome = ?1")
+    List<Variant> findByValues(String chromosome);
+
     @Query(value = "SELECT v FROM Variant v WHERE chromosome = ?1")
     List<Variant> findByValues(String chromosome, Pageable pageable);
 

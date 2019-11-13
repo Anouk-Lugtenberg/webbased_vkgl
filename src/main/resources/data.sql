@@ -38,7 +38,7 @@ CREATE TABLE variant
 SET GLOBAL local_infile = true;
 
 # This path should point at your consensus.txt file.
-LOAD DATA LOCAL INFILE '/Users/anouklugtenberg/Documents/webbased/consensus_part.txt'
+LOAD DATA LOCAL INFILE '/Users/alu23868/Documents/VKGL/consensus_part.txt'
     INTO TABLE variant
     COLUMNS TERMINATED BY '\t'
     IGNORE 1 LINES

@@ -15,14 +15,10 @@ public class VariantResource extends RepresentationModel {
     public EntityModel<Variant> toResource(Variant variant) {
         return new EntityModel<>(variant,
                 linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
-                linkTo(methodOn(VariantController.class).getAllVariants()).withRel("variants"));
+                linkTo(methodOn(VariantController.class).getAllVariants(0, 10)).withRel("variants"));
     }
 
     public EntityModel<Variant> toResource(Variant variant, String chromosome, int page, int size, int count) {
-        System.out.println("page = " + page);
-        System.out.println("size = " + size);
-        System.out.println("count = " + count);
-        System.out.println("size/count = " + size/count);
         if (page > 0 && (size * page) < count) {
             return new EntityModel<>(variant,
                     linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
@@ -36,6 +32,26 @@ public class VariantResource extends RepresentationModel {
             return new EntityModel<>(variant,
                     linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
                     linkTo(methodOn(VariantController.class).getVariantsByChromosome(chromosome, page-1, size)).withRel("previous"));
+        } else {
+            return new EntityModel<>(variant,
+                    linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel());
+        }
+    }
+
+    public EntityModel<Variant> toResource(Variant variant, int page, int size, int count) {
+        if (page > 0 && (size * page) < count) {
+            return new EntityModel<>(variant,
+                    linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
+                    linkTo(methodOn(VariantController.class).getAllVariants(page-1, size)).withRel("previous"),
+                    linkTo(methodOn(VariantController.class).getAllVariants(page+1, size)).withRel("next"));
+        } else if ((size * page) < count){
+            return new EntityModel<>(variant,
+                    linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
+                    linkTo(methodOn(VariantController.class).getAllVariants(page+1, size)).withRel("next"));
+        } else if (page > 0) {
+            return new EntityModel<>(variant,
+                    linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
+                    linkTo(methodOn(VariantController.class).getAllVariants(page-1, size)).withRel("previous"));
         } else {
             return new EntityModel<>(variant,
                     linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel());
