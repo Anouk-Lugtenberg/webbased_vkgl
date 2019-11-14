@@ -81,9 +81,12 @@ public class VariantController {
      * @return ResponseEntity with the found variants
      */
     @RequestMapping(value = "/classification", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CollectionModel<EntityModel<Variant>>> getVariantsByClassifications(@RequestParam Map<String, String> requestParams) {
+    public ResponseEntity<CollectionModel<EntityModel<Variant>>> getVariantsByClassifications(
+            @RequestParam Map<String, String> requestParams,
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
         Map<String, String> requestParamsToUpperCase = ConvertKeysToUpperCase(requestParams);
-        List<EntityModel<Variant>> variantsByTest = variantRepository
+        List<Variant> foundVariants = variantRepository
                 .findAll(where(withClassificationAMC(requestParamsToUpperCase.get("AMC")))
                 .and(withClassificationErasmus(requestParamsToUpperCase.get("ERASMUS")))
                 .and(withClassificationLumc(requestParamsToUpperCase.get("LUMC")))
@@ -91,12 +94,15 @@ public class VariantController {
                 .and(withClassificationRadboud(requestParamsToUpperCase.get("RADBOUD")))
                 .and(withClassificationUmcg(requestParamsToUpperCase.get("UMCG")))
                 .and(withClassificationUmcu(requestParamsToUpperCase.get("UMCU")))
-                .and(withClassificationVumc(requestParamsToUpperCase.get("VUMC"))))
-                .stream()
-                .map(variantResource::toResource)
+                .and(withClassificationVumc(requestParamsToUpperCase.get("VUMC"))));
+        int count = foundVariants.size();
+        //Gaat weer over naar de normale zoekstring, in plaats van dat de gevonden varianten meegenomen worden in page en size.
+        List<EntityModel<Variant>> variantsByClassification =
+                foundVariants.stream()
+                .map(variant -> variantResource.toResource(variant,page, size, count))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(
-                new CollectionModel<>(variantsByTest)
+                new CollectionModel<>(variantsByClassification)
         );
     }
 
