@@ -1,22 +1,5 @@
 drop table if exists variant;
 
-# CREATE TABLE variant
-# (
-#         id INT NOT NULL auto_increment KEY,
-#         chromosome VARCHAR(2),
-#         position INT,
-#         ref TEXT,
-#         alt TEXT,
-#         amc ENUM ('BENIGN', 'LIKELY_BENIGN', 'VOUS', 'LIKELY_PATHOGENIC', 'PATHOGENIC'),
-#         erasmus ENUM ('BENIGN', 'LIKELY_BENIGN', 'VOUS', 'LIKELY_PATHOGENIC', 'PATHOGENIC'),
-#         lumc ENUM ('BENIGN', 'LIKELY_BENIGN', 'VOUS', 'LIKELY_PATHOGENIC', 'PATHOGENIC'),
-#         nki ENUM ('BENIGN', 'LIKELY_BENIGN', 'VOUS', 'LIKELY_PATHOGENIC', 'PATHOGENIC'),
-#         radboud ENUM ('BENIGN', 'LIKELY_BENIGN', 'VOUS', 'LIKELY_PATHOGENIC', 'PATHOGENIC'),
-#         umcg ENUM ('BENIGN', 'LIKELY_BENIGN', 'VOUS', 'LIKELY_PATHOGENIC', 'PATHOGENIC'),
-#         umcu ENUM ('BENIGN', 'LIKELY_BENIGN', 'VOUS', 'LIKELY_PATHOGENIC', 'PATHOGENIC'),
-#         vumc ENUM ('BENIGN', 'LIKELY_BENIGN', 'VOUS', 'LIKELY_PATHOGENIC', 'PATHOGENIC')
-# );
-
 CREATE TABLE variant
 (
     variant_id INT NOT NULL auto_increment KEY,
