@@ -9,8 +9,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface VariantRepository extends CrudRepository<Variant, Integer>, VariantRepositoryCustom,
-        JpaRepository<Variant, Integer>, JpaSpecificationExecutor<Variant> {
+public interface VariantRepository extends CrudRepository<Variant, Integer>, JpaRepository<Variant, Integer>,
+        JpaSpecificationExecutor<Variant> {
     List<Variant> findAll();
 
     Page<Variant> findAll(Pageable pageable);
@@ -23,4 +23,6 @@ public interface VariantRepository extends CrudRepository<Variant, Integer>, Var
 
     @Query(value = "SELECT v FROM Variant v WHERE variant_id = ?1")
     Variant findByVariantId(int variantId);
+
+    
 }

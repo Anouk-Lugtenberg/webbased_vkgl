@@ -27,7 +27,7 @@ public class Variant {
     }
 
     public void setVariantId(int id) {
-        this.variantId = variantId;
+        this.variantId = id;
     }
 
     public String getChromosome() {

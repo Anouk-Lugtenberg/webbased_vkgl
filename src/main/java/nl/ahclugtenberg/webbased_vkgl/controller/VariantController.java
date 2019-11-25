@@ -23,6 +23,7 @@ public class VariantController {
     private final VariantRepository variantRepository;
     private final VariantResource variantResource;
 
+
     public VariantController(VariantRepository variantRepository, VariantResource variantResource) {
         this.variantRepository = variantRepository;
         this.variantResource = variantResource;
