@@ -3,6 +3,7 @@ package nl.ahclugtenberg.webbased_vkgl.controller;
 import nl.ahclugtenberg.webbased_vkgl.model.Variant;
 import nl.ahclugtenberg.webbased_vkgl.model.VariantRepository;
 import nl.ahclugtenberg.webbased_vkgl.model.VariantResource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -83,11 +84,15 @@ public class VariantController {
      */
     @RequestMapping(value = "/classification", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CollectionModel<EntityModel<Variant>>> getVariantsByClassifications(
-            @RequestParam Map<String, String> requestParams,
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
-            @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size,
+            @RequestParam Map<String, String> requestParams) {
         Map<String, String> requestParamsToUpperCase = ConvertKeysToUpperCase(requestParams);
-        List<Variant> foundVariants = variantRepository
+
+        requestParamsToUpperCase.remove("PAGE");
+        requestParamsToUpperCase.remove("SIZE");
+
+        Page<Variant> foundVariants = variantRepository
                 .findAll(where(withClassificationAMC(requestParamsToUpperCase.get("AMC")))
                 .and(withClassificationErasmus(requestParamsToUpperCase.get("ERASMUS")))
                 .and(withClassificationLumc(requestParamsToUpperCase.get("LUMC")))
@@ -95,12 +100,12 @@ public class VariantController {
                 .and(withClassificationRadboud(requestParamsToUpperCase.get("RADBOUD")))
                 .and(withClassificationUmcg(requestParamsToUpperCase.get("UMCG")))
                 .and(withClassificationUmcu(requestParamsToUpperCase.get("UMCU")))
-                .and(withClassificationVumc(requestParamsToUpperCase.get("VUMC"))));
-        int count = foundVariants.size();
-        //Gaat weer over naar de normale zoekstring, in plaats van dat de gevonden varianten meegenomen worden in page en size.
+                .and(withClassificationVumc(requestParamsToUpperCase.get("VUMC"))), PageRequest.of(page, size));
+
+        int count = (int) foundVariants.getTotalElements();
         List<EntityModel<Variant>> variantsByClassification =
                 foundVariants.stream()
-                .map(variant -> variantResource.toResource(variant,page, size, count))
+                .map(variant -> variantResource.toResource(variant, requestParamsToUpperCase, page, size, count))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(
                 new CollectionModel<>(variantsByClassification)

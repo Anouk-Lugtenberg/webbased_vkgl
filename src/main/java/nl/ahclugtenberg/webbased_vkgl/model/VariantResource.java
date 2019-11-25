@@ -5,6 +5,8 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.reactive.WebFluxLinkBuilder.methodOn;
 
@@ -52,6 +54,26 @@ public class VariantResource extends RepresentationModel {
             return new EntityModel<>(variant,
                     linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
                     linkTo(methodOn(VariantController.class).getAllVariants(page-1, size)).withRel("previous"));
+        } else {
+            return new EntityModel<>(variant,
+                    linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel());
+        }
+    }
+
+    public EntityModel<Variant> toResource(Variant variant, Map<String, String> requestParams, int page, int size, int count) {
+        if (page > 0 && (size * page) < count) {
+            return new EntityModel<>(variant,
+                    linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
+                    linkTo(methodOn(VariantController.class).getVariantsByClassifications(page-1, size, requestParams)).withRel("previous"),
+                    linkTo(methodOn(VariantController.class).getVariantsByClassifications(page+1, size, requestParams)).withRel("next"));
+        } else if ((size * page) < count){
+            return new EntityModel<>(variant,
+                    linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
+                    linkTo(methodOn(VariantController.class).getVariantsByClassifications(page+1, size, requestParams)).withRel("next"));
+        } else if (page > 0) {
+            return new EntityModel<>(variant,
+                    linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel(),
+                    linkTo(methodOn(VariantController.class).getVariantsByClassifications( page-1, size, requestParams)).withRel("previous"));
         } else {
             return new EntityModel<>(variant,
                     linkTo(methodOn(VariantController.class).findByVariantId(variant.getVariantId())).withSelfRel());

@@ -1,8 +1,6 @@
 package nl.ahclugtenberg.webbased_vkgl.model;
 
-import org.aspectj.weaver.ast.Var;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.web.PagedResourcesAssembler;
 
 public class VariantSpecifications {
 

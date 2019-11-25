@@ -2,6 +2,7 @@ package nl.ahclugtenberg.webbased_vkgl.model;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,8 @@ public interface VariantRepository extends CrudRepository<Variant, Integer>, Jpa
     List<Variant> findAll();
 
     Page<Variant> findAll(Pageable pageable);
+
+    Page<Variant> findAll(Specification<Variant> spec, Pageable pageable);
 
     @Query(value = "SELECT v FROM Variant v WHERE chromosome = ?1")
     List<Variant> findByValues(String chromosome);
