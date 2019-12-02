@@ -18,7 +18,7 @@ CREATE TABLE variant
 );
 
 
-SET GLOBAL local_infile = true;
+SET GLOBAL local_infile = 'ON';
 
 # This path should point at your consensus.txt file.
 LOAD DATA LOCAL INFILE '/Users/alu23868/Documents/VKGL/consensus_part.txt'
@@ -28,4 +28,4 @@ LOAD DATA LOCAL INFILE '/Users/alu23868/Documents/VKGL/consensus_part.txt'
     (chromosome, position, ref, alt, amc, erasmus, lumc, nki, radboud, umcg, umcu, vumc)
     SET variant_id = NULL;
 
-SET GLOBAL local_infile = false;
+SET GLOBAL local_infile = 'OFF';

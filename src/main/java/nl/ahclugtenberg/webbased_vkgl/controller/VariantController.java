@@ -18,10 +18,11 @@ public class VariantController {
         this.variantService = variantService;
     }
 
-    @GetMapping(value = "/test")
-    public String test() {
-        return "index";
-    }
+    @GetMapping(value = "/get/test/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+        public Variant findAllNoResource(@PathVariable int id) {
+            return variantService.test(id);
+        }
+
 
     /**
      * Retrieves variants based on their variant identifier

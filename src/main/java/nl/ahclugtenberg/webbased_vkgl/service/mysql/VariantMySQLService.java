@@ -5,6 +5,7 @@ import nl.ahclugtenberg.webbased_vkgl.model.VariantRepository;
 import nl.ahclugtenberg.webbased_vkgl.model.VariantResource;
 import nl.ahclugtenberg.webbased_vkgl.service.HelperMethods;
 import nl.ahclugtenberg.webbased_vkgl.service.VariantService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.EntityModel;
@@ -71,5 +72,11 @@ public class VariantMySQLService implements VariantService {
         return foundVariants.stream()
                         .map(variant -> variantResource.toResource(variant, requestParamsToUpperCase, page, size, count))
                         .collect(Collectors.toList());
+    }
+
+    //todo remove this when tests are working
+    @Override
+    public Variant test(int id) {
+        return variantRepository.findByVariantId(id);
     }
 }
