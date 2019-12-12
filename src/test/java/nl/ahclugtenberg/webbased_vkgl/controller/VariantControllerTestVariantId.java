@@ -6,19 +6,29 @@ import nl.ahclugtenberg.webbased_vkgl.service.VariantService;
 import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.RestDocumentationContext;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -27,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class VariantControllerTestVariantId {
 
     @Rule
-    public JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("build/generated-snippets");
+    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
 
     @Mock
     VariantService variantService;
@@ -44,7 +54,10 @@ class VariantControllerTestVariantId {
         MockitoAnnotations.initMocks(this);
         variantController = new VariantController(variantService);
         variantResource = new VariantResource();
-        mockMvc = MockMvcBuilders.standaloneSetup(variantController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(variantController)
+//                .apply(documentationConfiguration(restDocumentation))
+//                .alwaysDo(document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
+                .build();
 
         int variantId = 1;
         testVariant.setVariantId(variantId);
@@ -77,6 +90,7 @@ class VariantControllerTestVariantId {
                 .andExpect(jsonPath("$.vumc", equalTo(null)))
                 .andExpect(jsonPath("$.links[0].rel", equalTo("self")))
                 .andExpect(jsonPath("$.links[0].href", equalTo("/variants/" + 1)))
-                .andExpect(jsonPath("$.links[1].rel", equalTo("variants")));
+                .andExpect(jsonPath("$.links[1].rel", equalTo("variants")))
+                .andReturn();
     }
 }

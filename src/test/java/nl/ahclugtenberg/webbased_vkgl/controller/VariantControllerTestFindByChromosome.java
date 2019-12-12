@@ -96,7 +96,7 @@ public class VariantControllerTestFindByChromosome {
 
         given(variantService.findVariantsByChromosome("X", page, size))
                 .willReturn(entityModelsVariantPageOne);
-        
+
         int variantId = 5;
         for (int placeInPageArray = 0; placeInPageArray < 5; placeInPageArray++) {
             mockMvc.perform(get("/chromosome/" + "X" + "?page=1&size=5")
