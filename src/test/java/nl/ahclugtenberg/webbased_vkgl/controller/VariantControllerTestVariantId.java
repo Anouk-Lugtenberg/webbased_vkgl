@@ -55,6 +55,8 @@ class VariantControllerTestVariantId {
         variantController = new VariantController(variantService);
         variantResource = new VariantResource();
         mockMvc = MockMvcBuilders.standaloneSetup(variantController)
+                //These lines should be used to create Asciidoctor documentation, but I'm getting a NullPointerException
+                //when these lines are not commented. I'm not sure what is going wrong.
 //                .apply(documentationConfiguration(restDocumentation))
 //                .alwaysDo(document("{method-name}", preprocessRequest(prettyPrint()), preprocessResponse(prettyPrint())))
                 .build();
