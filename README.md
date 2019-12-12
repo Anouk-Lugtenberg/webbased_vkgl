@@ -8,6 +8,7 @@ A RESTful application build with Spring for showing DNA variant data of 8 UMCs.
 ## Getting started
 
 - Clone or fork this repository
+- Your own database should be connected and running, you can change the settings in ```application.properties``` file
 - Line 24 in the data file ```(src > main > resources > data.sql)``` should point at your locally saved consensus file (found under downloads)
 - Run the project
 
